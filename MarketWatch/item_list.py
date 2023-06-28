@@ -1,6 +1,5 @@
 API_BASE = 'https://api.torn.com/market/{ITEM_ID}?selections={SELECTIONS}&key={API_KEY}'
 SELECTIONS = "bazaar,itemmarket"
-API_KEY = "UTaap4sWkV66HY51"
 
 item_dict = {
     'item_id':'-1',

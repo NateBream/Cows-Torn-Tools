@@ -2,6 +2,7 @@ import requests
 import json
 from item_list import *
 from testdata import *
+from secrets import *
 
 def itemInfo(item):
     api_request = API_BASE.format(ITEM_ID=item, SELECTIONS=SELECTIONS, API_KEY=API_KEY)
