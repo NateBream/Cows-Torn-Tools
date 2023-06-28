@@ -2,6 +2,7 @@ API_MARKET_BASE = 'https://api.torn.com/market/{ITEM_ID}?selections={SELECTIONS}
 API_ITEM_BASE = 'https://api.torn.com/torn/?selections=items&key={API_KEY}'
 SELECTIONS = "bazaar,itemmarket"
 MARKET_URL = 'https://www.torn.com/imarket.php#/p=market&cat={CATEGORY}'
+LZPT_URL = 'https://lzpt.io/m/{NAME}'
 WEBHOOK_URL = 'https://discord.com/api/webhooks/{WEBHOOK_ID}/{WEBHOOK_TOKEN}'
 
 global_item_dict = []

@@ -62,13 +62,13 @@ def loadItemDict():
 
 # initiates discord webhook to post message
 def post(profit, item):
-    # item [post, discountRatio, totalProfit]
+    # profit [post, discountRatio, totalProfit, quantity]
     if not profit[0]:
         return
     
     # Make discord post
     discord_url = WEBHOOK_URL.format(WEBHOOK_ID=WEBHOOK_ID, WEBHOOK_TOKEN=WEBHOOK_TOKEN)
-    hyperlink = MARKET_URL.format(CATEGORY=item['category'])
+    hyperlink = LZPT_URL.format(NAME=item['item_name'].replace(' ', '+'))
     discord_data = {
                     'embeds':[
                         {
