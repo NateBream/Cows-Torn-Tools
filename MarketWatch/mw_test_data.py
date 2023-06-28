@@ -8,3 +8,4 @@ test_item_data = {
     'profit':'100000',          # minimum profit needed to report
     'category':'alcohol'           # market category
 }
+test_profit_data = [True, .25, 10000, 3]
