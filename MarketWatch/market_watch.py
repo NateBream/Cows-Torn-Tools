@@ -1,9 +1,11 @@
 import requests
-import json
 import time
 from mw_item_list import *
 from mw_test_data import *
 from mw_secrets import *
+
+version = '0.0.7'
+changelog = 'Added quantity tracking, start message, and failure recovery. Fixed misspelling'
 
 def getCurrentMarket(item):
     api_request = API_MARKET_BASE.format(ITEM_ID=item, SELECTIONS=SELECTIONS, API_KEY=API_KEY)
@@ -11,26 +13,19 @@ def getCurrentMarket(item):
     
     return response
 
-def parse(item):
-    cheapest = -1
-
-    for x in item:
-        if cheapest == -1 or int(x['cost']) < cheapest:
-            cheapest = int(x['cost'])
-
-    return cheapest
-
 def getCheapest(item):    
     cheapestItem = -1
     quantity = 0
-
+    
     for key in item.items():
-        tmp = parse(key[1])
-        if cheapestItem == -1 or tmp < cheapestItem:
-            cheapestItem = tmp
-            quantity = 1
-        elif tmp == cheapestItem:
-            quantity += 1
+        for x in key[1]:
+            tmp = int(x['cost'])
+            if cheapestItem == -1 or tmp < cheapestItem:
+                cheapestItem = tmp
+                quantity = 1
+            elif tmp == cheapestItem:
+                quantity += 1
+
     return [cheapestItem, quantity]
 
 
@@ -85,7 +80,7 @@ def post(profit, item):
                                     'inline':'true'
                                 },
                                 {
-                                    'name':'Discont',
+                                    'name':'Discount',
                                     'value':str(int(profit[1]*100)) + '%',
                                     'inline':'true'
                                 },
@@ -135,17 +130,78 @@ def item_engine(item):
 
     return [post, discountRatio, totalProfit, quantity]
 
+def sendStartMessage():
+    discord_url = WEBHOOK_URL.format(WEBHOOK_ID=WEBHOOK_ID, WEBHOOK_TOKEN=WEBHOOK_TOKEN)
+
+    discord_data = {
+                    'embeds':[
+                        {
+                            'title':'MARKET WATCH STARTING',
+                            'fields': [
+                                {
+                                    'name':'Version',
+                                    'value':version
+                                },
+                                {
+                                    'name':'Changelog',
+                                    'value':changelog
+                                }
+                            ]
+                        }
+                    ]
+    }
+   
+    r = requests.post(discord_url,  json=discord_data)
+
+def sendHeartBeat(hbTime):
+    discord_url = WEBHOOK_URL.format(WEBHOOK_ID=WEBHOOK_HB_ID, WEBHOOK_TOKEN=WEBHOOK_HB_TOKEN)
+
+    discord_data = {
+                    'embeds':[
+                        {
+                            'title':'MARKET WATCH HEARTBEAT',
+                            'fields': [
+                                {
+                                    'name':'Time',
+                                    'value':str(hbTime)
+                                }
+                            ]
+                        }
+                    ]
+    }
+   
+    r = requests.post(discord_url,  json=discord_data)
+    print('send hb')
+    print(r.text)
+
+
 def main():
+    # sendStartMessage()
     loadItemDict()
     loadMarketValues()
     print('Starting Now')
+
+    hbTime = int(time.time())
+    sendHeartBeat(hbTime)
+
     i = 0
     while(True):
-        for item in global_item_dict:
-            profit = item_engine(item)
-            post(profit, item)
-        time.sleep(30)
-        i += 1
-        print('Loop ' + str(i))
+        try:
+            for item in global_item_dict:
+                profit = item_engine(item)
+                post(profit, item)
+            time.sleep(30)
+            i += 1
+            print('Loop ' + str(i))
+        except Exception as e:
+            print('Failed')
+            print(e)
+        if (int(time.time()) - hbTime) > 60:
+            hbTime = int(time.time())
+            sendHeartBeat(int(time.time()))
+
+        print(int(time.time()))
+        print(time.time())
+        print(hbTime)
 
 main()
