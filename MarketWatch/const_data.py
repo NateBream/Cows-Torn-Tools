@@ -1,7 +1,7 @@
 #import requests
 
 torn_api_user_url = "https://api.torn.com/user/"
-torn_api_url = "https://api.torn.com/user/"
+torn_api_url = "https://api.torn.com/"
 greenleaf_selections = "?selections=profile,personalstats,properties&key="
 market_selections = "torn/?selections=items&key="
 

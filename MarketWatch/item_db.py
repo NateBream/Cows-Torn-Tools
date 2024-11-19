@@ -1,11 +1,11 @@
 import sqlite3
 import const_data
 import requests
-from secrets import API_KEY
+from secrets import API_KEY, db_name
 
 def update_mv(id_value, threshold, new_mv, name):
     # Connect to SQLite database
-    conn = sqlite3.connect(const_data.db_name)
+    conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
     # Check if the id exists
@@ -28,7 +28,7 @@ def update_mv(id_value, threshold, new_mv, name):
 
 def add_item(id_value, default_market_value, name, threshold, default_curr_low=-1, default_quantity=-1):
     # Connect to SQLite database
-    conn = sqlite3.connect(const_data.db_name)
+    conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
     # Check if the id already exists
@@ -56,7 +56,7 @@ def loadMarketValues():
 
 def create_database():
     # Connect to SQLite database (or create if it doesn't exist)
-    conn = sqlite3.connect(const_data.db_name)
+    conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
     # Create table to store costs and quantities
