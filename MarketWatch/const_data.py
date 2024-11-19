@@ -15,12 +15,12 @@ request_comment = "&comment=CowsTornTools"
 tornpal_api_url = "https://tornpal.com/api/v1/markets/clist/"
 
 watch_list = [
-                ["367", 10], # FHC
-                ["206", 0.90], # Xanax
-                ["366", 0.98], # eDVD
-                ["370", 0.98], # Drug Pack
-                ["818", 0.98], # 6 Pack Energy Drink
-                ["283", 0.98], # Donator Pack
+                ["367", 0.95], # FHC
+                ["206", 0.98], # Xanax
+                ["366", 0.95], # eDVD
+                ["370", 0.95], # Drug Pack
+                ["818", 0.95], # 6 Pack Energy Drink
+                ["283", 0.95], # Donator Pack
                 ["618", 0.90], # Stingray
                 ["384", 0.90], # Camel
                 ["281", 0.90], # Lion
