@@ -34,7 +34,7 @@ def post_tornpal(qty, item_name, cost, player_id):
     title = 'MARKET WATCH'
 
     # Make discord post
-    if player_id == "None" :
+    if player_id is None :
         hyperlink = const_data.LZPT_MARKET_URL.format(NAME=item_name.replace(' ', '+'))
     else:
         hyperlink = const_data.LZPT_BAZAAR_URL.format(NAME=player_id)

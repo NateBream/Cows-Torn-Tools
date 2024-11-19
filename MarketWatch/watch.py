@@ -27,9 +27,6 @@ def market_watch():
         new_qty = lowest_item[1]
         player_id = lowest_item[2]
 
-        if player_id is None:
-            player_id = id_value
-
         if (curr_low == -1):
             curr_low = new_low + 1
 
