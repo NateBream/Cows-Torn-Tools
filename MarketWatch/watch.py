@@ -4,10 +4,11 @@ import time
 import const_data
 import discord_hook
 import request
+from secrets import db_name
 
 def market_watch():
     # Connect to SQLite database
-    conn = sqlite3.connect(const_data.db_name)
+    conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
     # Select all rows from the market table
