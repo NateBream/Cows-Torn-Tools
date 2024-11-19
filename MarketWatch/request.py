@@ -26,6 +26,7 @@ def get_tornpal(item_id):
     for i in data.get('listings', []):
         if i['price'] != 1:
             cheapest = [i['price'], i['quantity'], i['player_id']]
+            break
 
     return cheapest
 
