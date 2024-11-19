@@ -20,7 +20,7 @@ watch_list = [
                 ["366", 0.95], # eDVD
                 ["370", 0.95], # Drug Pack
                 ["818", 0.95], # 6 Pack Energy Drink
-                ["283", 0.95], # Donator Pack
+                ["283", 23500000], # Donator Pack
                 ["618", 0.90], # Stingray
                 ["384", 0.90], # Camel
                 ["281", 0.90], # Lion

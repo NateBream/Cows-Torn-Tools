@@ -27,10 +27,20 @@ def market_watch():
         new_qty = lowest_item[1]
         player_id = lowest_item[2]
 
+        if player_id is None:
+            player_id = id_value
+
         if (curr_low == -1):
             curr_low = new_low + 1
 
-        if new_low > (market_value * threshold):
+        priceThreshold = -1
+
+        if threshold > 1:
+            priceThreshold = threshold
+        else:
+            priceThreshold = (market_value * threshold)
+
+        if new_low > priceThreshold:
             continue
         elif new_low == curr_low and new_qty != quantity:
             cursor.execute('''UPDATE market
