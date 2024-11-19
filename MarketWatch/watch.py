@@ -21,8 +21,6 @@ def market_watch():
 
         lowest_item = request.get_tornpal(id_value) # [price, qty, player_id]
 
-        print(lowest_item)
-
         new_low = lowest_item[0]
         new_qty = lowest_item[1]
         player_id = lowest_item[2]
@@ -44,7 +42,7 @@ def market_watch():
                               SET quantity = ?
                               WHERE id = ?''',
                            (new_qty, id_value))
-            discord_hook.post_tornpal(new_qty, name, new_low, player_id)
+            discord_hook.post_tornpal(new_qty, name, new_low, player_id, id_value)
         elif new_low == curr_low and new_qty == quantity:
             continue
         else:
@@ -53,7 +51,7 @@ def market_watch():
                               quantity = ?
                               WHERE id = ?''',
                            (new_low, new_qty, id_value))
-            discord_hook.post_tornpal(new_qty, name, new_low, player_id)
+            discord_hook.post_tornpal(new_qty, name, new_low, player_id, id_value)
 
     # Commit changes and close connection
     conn.commit()
@@ -63,7 +61,7 @@ def po_watch(item_id, cost, item_name):
     lowest_item = request.get_tornpal(item_id) # [price, qty, player_id]
 
     if (lowest_item[0] <= cost):
-        discord_hook.post_po(lowest_item[1], item_id, item_name, cost, lowest_item[2])
+        discord_hook.post_po(lowest_item[1], item_id, item_name, cost, lowest_item[2], item_id)
 
 def run():
     for item in const_data.po:
@@ -74,7 +72,6 @@ def run():
     discord_hook.send_hb()
 
 
-
-run()
-time.sleep(31)
-run()
+for i in range (0, 6):
+    run()
+    time.sleep(8)

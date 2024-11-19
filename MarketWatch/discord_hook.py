@@ -26,7 +26,7 @@ def send_hb():
 
     post(secrets.HB_WEBHOOK_URL, discord_data)
     
-def post_tornpal(qty, item_name, cost, player_id):
+def post_tornpal(qty, item_name, cost, player_id, item_id):
     if qty == 0:
         return
     
@@ -35,7 +35,7 @@ def post_tornpal(qty, item_name, cost, player_id):
 
     # Make discord post
     if player_id is None :
-        hyperlink = const_data.LZPT_MARKET_URL.format(NAME=item_name.replace(' ', '+'))
+        hyperlink = const_data.LZPT_MARKET_URL.format(NAME=item_id)
     else:
         hyperlink = const_data.LZPT_BAZAAR_URL.format(NAME=player_id)
 
@@ -103,7 +103,7 @@ def post_greenleaf(player_id, name, fac, f_id, loss, t_nw):
 
     r = requests.post(discord_url,  json=discord_data)
 
-def post_po(qty, item, item_name, cost, player_id):
+def post_po(qty, item, item_name, cost, player_id, item_id):
     if qty == 0:
         return
 
@@ -111,7 +111,7 @@ def post_po(qty, item, item_name, cost, player_id):
     discord_url = secrets.PO_WEBHOOK_URL
 
     if player_id == "null":
-        hyperlink = const_data.LZPT_MARKET_URL.format(NAME=item_name.replace(' ', '+'))
+        hyperlink = const_data.LZPT_MARKET_URL.format(NAME=item_id)
     else:
         hyperlink = const_data.LZPT_BAZAAR_URL.format(NAME=player_id)
 
