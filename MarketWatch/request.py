@@ -21,9 +21,12 @@ def generate_url(item_id, selection):
         return const_data.torn_api_user_url + str(item_id) + const_data.greenleaf_selections + secrets.API_KEY + const_data.request_comment
 
 def get_tornpal(item_id):
+    cheapest = [-1, -1, -1]
     data = make_request(generate_url(item_id, "tornpal"))
-    item_data = data.get('listings', [])[0]
-    cheapest = [item_data['price'], item_data['quantity'], item_data['player_id']]
+    for i in data.get('listings', []):
+        if i['price'] != 1:
+            cheapest = [i['price'], i['quantity'], i['player_id']]
+
     return cheapest
 
 def get_greenleaf(player_id):

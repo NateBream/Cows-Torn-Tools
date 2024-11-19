@@ -38,7 +38,7 @@ def market_watch():
                               WHERE id = ?''',
                            (new_qty, id_value))
             discord_hook.post_tornpal(new_qty, name, new_low, player_id)
-        elif new_low == curr_low and new_qty != quantity:
+        elif new_low == curr_low and new_qty == quantity:
             continue
         else:
             cursor.execute('''UPDATE market
