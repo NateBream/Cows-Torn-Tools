@@ -35,14 +35,18 @@ def market_watch():
         else:
             priceThreshold = (market_value * threshold)
 
-        if new_low > priceThreshold:
+        totalProfit = (market_value - new_low) * new_qty
+
+        if totalProfit < 100000:
+            continue
+        elif new_low > priceThreshold:
             continue
         elif new_low == curr_low and new_qty != quantity:
             cursor.execute('''UPDATE market
                               SET quantity = ?
                               WHERE id = ?''',
                            (new_qty, id_value))
-            discord_hook.post_tornpal(new_qty, name, new_low, player_id, id_value)
+            discord_hook.post_tornpal(new_qty, name, new_low, player_id, id_value, totalProfit)
         elif new_low == curr_low and new_qty == quantity:
             continue
         else:
@@ -51,7 +55,7 @@ def market_watch():
                               quantity = ?
                               WHERE id = ?''',
                            (new_low, new_qty, id_value))
-            discord_hook.post_tornpal(new_qty, name, new_low, player_id, id_value)
+            discord_hook.post_tornpal(new_qty, name, new_low, player_id, id_value, totalProfit)
 
     # Commit changes and close connection
     conn.commit()

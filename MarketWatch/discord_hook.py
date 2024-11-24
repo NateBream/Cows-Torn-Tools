@@ -26,7 +26,7 @@ def send_hb():
 
     post(secrets.HB_WEBHOOK_URL, discord_data)
     
-def post_tornpal(qty, item_name, cost, player_id, item_id):
+def post_tornpal(qty, item_name, cost, player_id, item_id, profit):
     if qty == 0:
         return
     
@@ -36,8 +36,12 @@ def post_tornpal(qty, item_name, cost, player_id, item_id):
     # Make discord post
     if player_id is None :
         hyperlink = const_data.LZPT_MARKET_URL.format(NAME=item_id)
+        loc = 'Market'
     else:
         hyperlink = const_data.LZPT_BAZAAR_URL.format(NAME=player_id)
+        loc = 'Bazaar'
+
+    t = time.strftime("%H:%M:%S", time.localtime())
 
     discord_data = {
                     'embeds':[
@@ -59,9 +63,18 @@ def post_tornpal(qty, item_name, cost, player_id, item_id):
                                     'value':str(qty)
                                 },
                                 {
+                                    'name':'Total Profit',
+                                    'value':str(profit)
+                                },
+                                {
                                     'name':'Link',
-                                    'value':'[Click Here To Go To Market]({})'.format(hyperlink)
+                                    'value':'[Click Here To Go To {}]({})'.format(loc, hyperlink)
+                                },
+                                {
+                                    'name':'Time',
+                                    'value':str(t)
                                 }
+                                
                             ]
                         }
                     ]
