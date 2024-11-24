@@ -73,9 +73,7 @@ def run():
 
     market_watch()
 
-    discord_hook.send_hb()
-
-
-for i in range (0, 6):
+for i in range (0, 5):
     run()
-    time.sleep(8)
+
+discord_hook.send_hb()
