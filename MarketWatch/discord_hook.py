@@ -64,7 +64,7 @@ def post_tornpal(qty, item_name, cost, player_id, item_id, profit):
                                 },
                                 {
                                     'name':'Total Profit',
-                                    'value':str(profit)
+                                    'value':'${:0,.0f}'.format(profit),
                                 },
                                 {
                                     'name':'Link',
