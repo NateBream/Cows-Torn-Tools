@@ -41,7 +41,7 @@ def post_tornpal(qty, item_name, cost, player_id, item_id, profit):
         hyperlink = const_data.LZPT_BAZAAR_URL.format(NAME=player_id)
         loc = 'Bazaar'
 
-    t = time.strftime("%H:%M:%S", time.localtime())
+    t = int(time.time())
 
     discord_data = {
                     'embeds':[
@@ -72,7 +72,7 @@ def post_tornpal(qty, item_name, cost, player_id, item_id, profit):
                                 },
                                 {
                                     'name':'Time',
-                                    'value':str(t)
+                                    'value':'<t:{}:R>'.format(t)
                                 }
                                 
                             ]

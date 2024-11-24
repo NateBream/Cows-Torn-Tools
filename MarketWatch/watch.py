@@ -76,4 +76,6 @@ def run():
 for i in range (0, 5):
     run()
 
+    time.sleep(3)
+
 discord_hook.send_hb()
