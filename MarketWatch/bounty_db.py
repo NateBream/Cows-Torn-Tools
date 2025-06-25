@@ -21,6 +21,19 @@ def add_bounty(player_id, player_name, value, qty):
         cursor.execute('''INSERT INTO bounty (id, value, quantity, name)
                           VALUES (?, ?, ?, ?)''',
                        (player_id, value, qty, player_name))
+    else: # A bounty already exists in db, update qty if value is the same
+        cursor.execute('SELECT value, quantity FROM bounty WHERE id = ?', (player_id,))
+        data = cursor.fetchone()
+        eValue = int(data[0])
+        eQty = int(data[1])
+
+        if value == eValue:
+            print("Updating {name}. Value: {v}, Old Qty: {q} New Qty: {n}".format(name=player_name, v=value, q=qty, n=(qty+eQty)))
+            cursor.execute('''UPDATE bounty
+                                SET quantity = ?
+                                WHERE id = ?;''',
+                        (qty + eQty, player_id))
+        
 
     # Commit changes and close connection
     conn.commit()
@@ -131,7 +144,7 @@ def processBounties():
 
         cursor.execute("SELECT * FROM bounty_tmp WHERE id = ?", (player_id,))
         tmp_data = cursor.fetchone()
-
+        
         if tmp_data is not None:
             tmp_value = int(tmp_data[1])
             tmp_qty = int(tmp_data[2])
