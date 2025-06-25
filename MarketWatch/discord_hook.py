@@ -157,3 +157,36 @@ def post_po(qty, item, item_name, cost, player_id, item_id):
     }
 
     r = requests.post(discord_url,  json=discord_data)
+
+def post_bounty(name, player_id, value, qty, bsp):
+    # Make discord post
+    discord_url = secrets.BOUNTY_WEBHOOK_URL
+
+    discord_data = {
+                    'embeds':[
+                        {
+                            'title':'BOUNTY',
+                            'description':'',
+                            'fields': [
+                                {
+                                    'name':'Player Name',
+                                    'value':'[{}]({})'.format(name, const_data.LZPT_PROFILE_URL.format(NAME=player_id))
+                                },
+                                {
+                                    'name':'Bounty Value',
+                                    'value':'${:0,}'.format(value)
+                                },
+                                {
+                                    'name':'Quantity',
+                                    'value':str(qty)
+                                },
+                                {
+                                    'name':'BSP',
+                                    'value':str(bsp),
+                                }
+                            ]
+                        }
+                    ]
+    }
+
+    r = requests.post(discord_url,  json=discord_data)

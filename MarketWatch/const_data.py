@@ -5,6 +5,11 @@ torn_api_url = "https://api.torn.com/"
 greenleaf_selections = "?selections=profile,personalstats,properties&key="
 market_selections = "torn/?selections=items&key="
 
+torn_api_v2_url = "https://api.torn.com/v2/"
+bounty_selections = "torn/bounties?limit=100&offset={off}&key="
+
+BSP_API_URL = 'http://www.lol-manager.com/api/battlestats/{bsp_api}/{id}/CowBB'
+
 LZPT_MARKET_URL = 'https://tcy.sh/m/{NAME}'
 LZPT_BAZAAR_URL = 'https://tcy.sh/b/{NAME}'
 LZPT_FACTION_URL = 'https://tcy.sh/f/{NAME}'
