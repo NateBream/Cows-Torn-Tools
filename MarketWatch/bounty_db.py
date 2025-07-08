@@ -99,6 +99,10 @@ def bountyHook(player_id, value, qty):
     bsp = cursor.fetchone()
     if bsp is None:
         return
+
+    if (bsp > const_data.BOUNTY_CUTOFF):
+        return
+
     bsp = bsp[0]
 
     bsp = format_large_number(bsp)

@@ -15,6 +15,8 @@ LZPT_BAZAAR_URL = 'https://tcy.sh/b/{NAME}'
 LZPT_FACTION_URL = 'https://tcy.sh/f/{NAME}'
 LZPT_PROFILE_URL = 'https://tcy.sh/p/{NAME}'
 
+BOUNTY_CUTOFF = 2000000000 # 2bil
+
 request_comment = "&comment=CowsTornTools"
 
 tornpal_api_url = "https://tornpal.com/api/v1/markets/clist/"

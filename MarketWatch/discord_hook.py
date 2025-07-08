@@ -159,8 +159,16 @@ def post_po(qty, item, item_name, cost, player_id, item_id):
     r = requests.post(discord_url,  json=discord_data)
 
 def post_bounty(name, player_id, value, qty, bsp):
+
     # Make discord post
     discord_url = secrets.BOUNTY_WEBHOOK_URL
+
+    if (value >= 2000000):
+        discord_url = secrets.BIG_BOUNTY_WEBHOOK_URL
+    elif (value >= 1000000);
+        discord_url = secrets.MED_BOUNTY_WEBHOOK_URL
+    else
+        discord_url = secrets.BOUNTY_WEBHOOK_URL
 
     discord_data = {
                     'embeds':[
