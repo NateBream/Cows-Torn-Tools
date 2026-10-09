@@ -1,7 +1,6 @@
 import re
 import sqlite3
 import time
-from collections import deque
 
 import requests
 
@@ -16,26 +15,7 @@ FIRST_RUN_LOOKBACK = 60 * 60   # How far back to look when there is no saved sta
 WINDOW_OVERLAP = 10 * 60       # Re-scan this much before the last run so attacks in progress aren't missed
 PRUNE_AGE = 7 * 24 * 60 * 60   # Forget processed attacks older than this
 
-MAX_BSP_CALLS_PER_MINUTE = 5  # Torn api calls are rate limited by the api store
-_call_times = deque()
-
 MUG_AMOUNT_RE = re.compile(r'\$([\d,]+)')
-
-
-def rate_limited_get(url):
-    """GET a url, never making more than MAX_BSP_CALLS_PER_MINUTE calls in any 60 second window."""
-    now = time.time()
-    while _call_times and now - _call_times[0] >= 60:
-        _call_times.popleft()
-    if len(_call_times) >= MAX_BSP_CALLS_PER_MINUTE:
-        wait = 60 - (now - _call_times[0]) + 0.5
-        print("Rate limit reached, waiting {:.1f}s".format(wait))
-        time.sleep(wait)
-        _call_times.popleft()
-    _call_times.append(time.time())
-
-    response = requests.get(url, timeout=30)
-    return response.json()
 
 
 def create_database():
@@ -108,7 +88,7 @@ def get_mug_amount(code):
 
 def get_bsp(player_id):
     try:
-        bsp_data = rate_limited_get(const_data.BSP_API_URL.format(bsp_api=BSP_API_KEY, id=player_id))
+        bsp_data = requests.get(const_data.BSP_API_URL.format(bsp_api=BSP_API_KEY, id=player_id), timeout=30).json()
         return format_large_number(bsp_data['TBS'])
     except Exception as e:
         print("BSP lookup failed for {id}: {e}".format(id=player_id, e=e))
