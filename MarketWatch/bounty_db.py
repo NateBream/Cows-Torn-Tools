@@ -1,7 +1,8 @@
 import sqlite3
 import const_data
 import requests
-from secrets import API_KEY, bounty_db_name, BSP_API_KEY
+import api_store
+from secrets import bounty_db_name, BSP_API_KEY
 import time
 import discord_hook
 
@@ -40,9 +41,7 @@ def add_bounty(player_id, player_name, value, qty):
     conn.close()
 
 def loadBounties(offset):
-    api_request = const_data.torn_api_v2_url + const_data.bounty_selections.format(off=offset) + API_KEY
-    response = requests.get(api_request)
-    data = response.json()
+    data = api_store.torn_get(const_data.bounty_url, {'limit': 100, 'offset': offset})
     pData = data['bounties']
     bountyList = [dict(row) for row in pData]
 

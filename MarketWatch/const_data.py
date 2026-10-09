@@ -2,13 +2,14 @@
 
 torn_api_user_url = "https://api.torn.com/user/"
 torn_api_url = "https://api.torn.com/"
-greenleaf_selections = "?selections=profile,personalstats,properties&key="
-market_selections = "torn/?selections=items&key="
+greenleaf_selections = "profile,personalstats,properties"
+market_url = torn_api_url + "torn/"
+market_selections = "items"
 
 torn_api_v2_url = "https://api.torn.com/v2/"
-bounty_selections = "torn/bounties?limit=100&offset={off}&key="
-faction_attacks_selections = "faction/attacks?filters=outgoing&limit=100&sort=ASC&from={frm}&to={to}&key="
-attacklog_selections = "torn/attacklog?log={code}&sort=DESC&key="
+bounty_url = torn_api_v2_url + "torn/bounties"
+faction_attacks_url = torn_api_v2_url + "faction/attacks"
+attacklog_url = torn_api_v2_url + "torn/attacklog"
 
 BSP_API_URL = 'http://www.lol-manager.com/api/battlestats/{bsp_api}/{id}/CowBB'
 
@@ -17,7 +18,7 @@ LZPT_BAZAAR_URL = 'https://tcy.sh/b/{NAME}'
 LZPT_FACTION_URL = 'https://tcy.sh/f/{NAME}'
 LZPT_PROFILE_URL = 'https://tcy.sh/p/{NAME}'
 
-request_comment = "&comment=CowsTornTools"
+request_comment_name = "CowsTornTools"
 
 tornpal_api_url = "https://tornpal.com/api/v1/markets/clist/"
 
