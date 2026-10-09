@@ -50,3 +50,5 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+# Torn api key store
+api_keys.db

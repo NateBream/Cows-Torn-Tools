@@ -1,7 +1,7 @@
 import sqlite3
 import const_data
-import requests
-from secrets import API_KEY, db_name
+import api_store
+from secrets import db_name
 
 def update_mv(id_value, threshold, new_mv, name):
     # Connect to SQLite database
@@ -46,9 +46,7 @@ def add_item(id_value, default_market_value, name, threshold, default_curr_low=-
     conn.close()
 
 def loadMarketValues():
-    api_request = const_data.torn_api_url + const_data.market_selections + API_KEY
-    response = requests.get(api_request)
-    itemsList = response.json()
+    itemsList = api_store.torn_get(const_data.market_url, {'selections': const_data.market_selections})
     values = itemsList['items']
 
     for item in const_data.watch_list:

@@ -5,9 +5,10 @@ from collections import deque
 
 import requests
 
+import api_store
 import const_data
 import discord_hook
-from secrets import API_KEY, BSP_API_KEY, mug_db_name
+from secrets import BSP_API_KEY, mug_db_name
 
 MUG_THRESHOLD = 2000000
 MIN_RUN_INTERVAL = 14 * 60     # Skip the run if the last one was less than this many seconds ago
@@ -15,22 +16,18 @@ FIRST_RUN_LOOKBACK = 60 * 60   # How far back to look when there is no saved sta
 WINDOW_OVERLAP = 10 * 60       # Re-scan this much before the last run so attacks in progress aren't missed
 PRUNE_AGE = 7 * 24 * 60 * 60   # Forget processed attacks older than this
 
-MAX_CALLS_PER_MINUTE = 5
+MAX_BSP_CALLS_PER_MINUTE = 5  # Torn api calls are rate limited by the api store
 _call_times = deque()
 
 MUG_AMOUNT_RE = re.compile(r'\$([\d,]+)')
 
 
-class ApiError(Exception):
-    pass
-
-
 def rate_limited_get(url):
-    """GET a url, never making more than MAX_CALLS_PER_MINUTE calls in any 60 second window."""
+    """GET a url, never making more than MAX_BSP_CALLS_PER_MINUTE calls in any 60 second window."""
     now = time.time()
     while _call_times and now - _call_times[0] >= 60:
         _call_times.popleft()
-    if len(_call_times) >= MAX_CALLS_PER_MINUTE:
+    if len(_call_times) >= MAX_BSP_CALLS_PER_MINUTE:
         wait = 60 - (now - _call_times[0]) + 0.5
         print("Rate limit reached, waiting {:.1f}s".format(wait))
         time.sleep(wait)
@@ -38,10 +35,7 @@ def rate_limited_get(url):
     _call_times.append(time.time())
 
     response = requests.get(url, timeout=30)
-    data = response.json()
-    if 'error' in data:
-        raise ApiError(data['error'])
-    return data
+    return response.json()
 
 
 def create_database():
@@ -84,8 +78,9 @@ def load_mugs(frm, to):
     """Return all outgoing faction attacks that ended in a mug between frm and to."""
     mugs = {}
     while True:
-        api_request = const_data.torn_api_v2_url + const_data.faction_attacks_selections.format(frm=frm, to=to) + API_KEY + const_data.request_comment
-        attacks = rate_limited_get(api_request).get('attacks', [])
+        params = {'filters': 'outgoing', 'limit': 100, 'sort': 'ASC', 'from': frm, 'to': to}
+        attacks = api_store.torn_get(const_data.faction_attacks_url, params,
+                                     min_level=api_store.MINIMAL, timeout=30).get('attacks', [])
 
         for attack in attacks:
             if attack['result'] == 'Mugged':
@@ -102,8 +97,7 @@ def load_mugs(frm, to):
 
 
 def get_mug_amount(code):
-    api_request = const_data.torn_api_v2_url + const_data.attacklog_selections.format(code=code) + API_KEY + const_data.request_comment
-    data = rate_limited_get(api_request)
+    data = api_store.torn_get(const_data.attacklog_url, {'log': code, 'sort': 'DESC'}, timeout=30)
     for entry in data.get('attacklog', {}).get('log', []):
         if entry['action'] == 'mug':
             match = MUG_AMOUNT_RE.search(entry['text'])
@@ -168,7 +162,7 @@ def run():
             cursor.execute('INSERT INTO processed_mugs (id, ended, amount) VALUES (?, ?, ?)',
                            (attack['id'], attack['ended'], amount))
             conn.commit()
-    except ApiError as e:
+    except (api_store.TornApiError, api_store.NoKeyAvailable) as e:
         # Leave last_success alone so the next run re-scans this window
         print("Torn API error: {}".format(e))
         conn.close()

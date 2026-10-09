@@ -1,6 +1,6 @@
-import secrets
 import const_data
 import requests
+import api_store
 
 def make_request(url):
     try:
@@ -12,13 +12,19 @@ def make_request(url):
     except:
         return []
 
+def make_torn_request(url, params):
+    try:
+        return api_store.torn_get(url, params)
+    except Exception as e:
+        print(e)
+        return {}
+
 def generate_url(item_id, selection):
     if selection == "tornpal":
         return const_data.tornpal_api_url + str(item_id)
-    if selection == "itemmarket":
-        return const_data.torn_api_url + str(item_id) + const_data.market_selections + secrets.API_KEY + const_data.request_comment
-    if selection == "greenleaf":
-        return const_data.torn_api_user_url + str(item_id) + const_data.greenleaf_selections + secrets.API_KEY + const_data.request_comment
+
+def get_itemmarket(item_id):
+    return make_torn_request(const_data.market_url + str(item_id), {'selections': const_data.market_selections})
 
 def get_tornpal(item_id):
     cheapest = [-1, -1, -1]
@@ -31,7 +37,7 @@ def get_tornpal(item_id):
     return cheapest
 
 def get_greenleaf(player_id):
-    data = make_request(generate_url(player_id, "greenleaf"))
+    data = make_torn_request(const_data.torn_api_user_url + str(player_id), {'selections': const_data.greenleaf_selections})
 
     # Extracting the required fields
     name = data.get("name", {})
