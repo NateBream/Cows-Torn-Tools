@@ -190,3 +190,32 @@ def post_bounty(name, player_id, value, qty, bsp):
     }
 
     r = requests.post(discord_url,  json=discord_data)
+
+def post_mug(name, player_id, amount, bsp):
+    # Make discord post
+    discord_url = secrets.MUG_WEBHOOK_URL
+
+    discord_data = {
+                    'embeds':[
+                        {
+                            'title':'MUG',
+                            'description':'',
+                            'fields': [
+                                {
+                                    'name':'Player Name',
+                                    'value':'[{}]({})'.format(name, const_data.LZPT_PROFILE_URL.format(NAME=player_id))
+                                },
+                                {
+                                    'name':'Mug Amount',
+                                    'value':'${:0,}'.format(amount)
+                                },
+                                {
+                                    'name':'BSP',
+                                    'value':str(bsp),
+                                }
+                            ]
+                        }
+                    ]
+    }
+
+    r = requests.post(discord_url,  json=discord_data)
