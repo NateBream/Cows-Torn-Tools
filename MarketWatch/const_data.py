@@ -7,6 +7,8 @@ market_selections = "torn/?selections=items&key="
 
 torn_api_v2_url = "https://api.torn.com/v2/"
 bounty_selections = "torn/bounties?limit=100&offset={off}&key="
+faction_attacks_selections = "faction/attacks?filters=outgoing&limit=100&sort=ASC&from={frm}&to={to}&key="
+attacklog_selections = "torn/attacklog?log={code}&sort=DESC&key="
 
 BSP_API_URL = 'http://www.lol-manager.com/api/battlestats/{bsp_api}/{id}/CowBB'
 
