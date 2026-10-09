@@ -80,12 +80,12 @@ def updateBSP(player_id, name):
     elif (currTime - data[0]) >= 2592000: # Greater than 30 days
         print("Updating BSP For {id}, last updated: {last_up}, current time: {time}".format(id=player_id, last_up=data[0], time=currTime))
         time.sleep(0.5)
-        api_request = const_data.BSP_API_URL.format(BSP_API_KEY, player_id)
+        api_request = const_data.BSP_API_URL.format(bsp_api=BSP_API_KEY, id=player_id)
         response = requests.get(api_request)
         bsp_data = response.json()
         bsp = bsp_data['TBS']
         cursor.execute('''UPDATE bsp_data
-                            SET bsp = ?, currTime = ?, name = ?
+                            SET bsp = ?, last_updated = ?, name = ?
                             WHERE id = ?;''',
                     (bsp, currTime, name, player_id))
     conn.commit()
@@ -205,7 +205,7 @@ off = 0
 v = loadBounties(off)
 while v > THRESHOLD:
     print(v)
-    v = loadBounties(off)
-    time.sleep(1)
     off += 100
+    time.sleep(1)
+    v = loadBounties(off)
 processBounties()
